@@ -289,16 +289,27 @@
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
     s.onload = () => {
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      pdfjsLib.getDocument('MollyBurtWestvig_CV.pdf').promise.then(pdf => {
-        pdf.getPage(1).then(page => {
-          const canvas = document.getElementById('cvCanvas');
-          const cw = canvas.parentElement.offsetWidth;
-          const base = page.getViewport({ scale:1 });
-          const vp = page.getViewport({ scale: cw / base.width });
-          canvas.width = vp.width; canvas.height = vp.height;
-          canvas.style.width = '100%'; canvas.style.height = 'auto';
-          page.render({ canvasContext: canvas.getContext('2d'), viewport: vp });
-        });
+     pdfjsLib.getDocument('MollyBurtWestvig_CV.pdf').promise.then(pdf => {
+  const container = document.getElementById('cvCanvas').parentElement;
+  container.innerHTML = '';
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    pdf.getPage(pageNum).then(page => {
+      const canvas = document.createElement('canvas');
+      canvas.style.width = '100%';
+      canvas.style.display = 'block';
+      canvas.style.marginBottom = '2px';
+      container.appendChild(canvas);
+      const containerWidth = container.offsetWidth;
+      const base = page.getViewport({ scale: 1 });
+      const scale = containerWidth / base.width;
+      const vp = page.getViewport({ scale });
+      canvas.width = vp.width;
+      canvas.height = vp.height;
+      canvas.style.height = 'auto';
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: vp });
+    });
+  }
+});
       });
     };
     document.head.appendChild(s);
