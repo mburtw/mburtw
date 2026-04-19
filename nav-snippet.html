@@ -1,0 +1,76 @@
+<!-- ============================================================
+     MOLLY BURT-WESTVIG — NAV SNIPPET
+     ============================================================
+     Copy this nav block into every page.
+     Replace href values with correct relative paths.
+     On index.html: href="work.html"
+     On subpages:   href="../work.html" or href="work.html"
+     ============================================================ -->
+
+<!-- CURSOR DOT (required on every page) -->
+<div id="cursor-dot"></div>
+
+<!-- NAVIGATION -->
+<nav class="mb-nav">
+  <div class="mb-nav-left">
+    <!-- ↓ EDIT: Replace with your name -->
+    <span class="mb-nav-name">Molly Burt-Westvig</span>
+  </div>
+  <div class="mb-nav-center">
+    <!-- ↓ EDIT: Logo rotates randomly from /images/Logo_1.png through Logo_4.png -->
+    <img id="navLogo" src="images/Logo_1.png" alt="Logo" style="height:18px; object-fit:contain;">
+  </div>
+  <div class="mb-nav-right">
+    <ul class="mb-nav-links">
+      <li><a href="work.html" class="link-hover">Work</a></li>
+      <li><a href="exhibitions.html" class="link-hover">Exhibitions</a></li>
+      <li><a href="#" id="cvNavLink" class="link-hover">CV</a></li>
+      <li><a href="about.html" class="link-hover">About</a></li>
+      <li>
+        <!-- ↓ EDIT: Replace # with your Instagram URL -->
+        <a href="https://instagram.com/YOURUSERNAME" target="_blank" class="mb-ig-link link-hover" aria-label="Instagram">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+      </li>
+    </ul>
+    <!-- Mobile hamburger -->
+    <button class="mb-hamburger link-hover" id="mbHamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header">
+    <span class="mobile-menu-name">Molly Burt-Westvig</span>
+    <button class="mobile-menu-close link-hover" id="menuClose">&#215;</button>
+  </div>
+  <ul class="mobile-menu-links">
+    <li><a href="work.html" class="link-hover">Work</a></li>
+    <li><a href="exhibitions.html" class="link-hover">Exhibitions</a></li>
+    <li><a href="#" class="link-hover" id="cvMobileLink">CV</a></li>
+    <li><a href="about.html" class="link-hover">About</a></li>
+  </ul>
+</div>
+
+<!-- CV OVERLAY (include on every page) -->
+<div class="cv-backdrop" id="cvBackdrop">
+  <div class="cv-float-wrap">
+    <div class="cv-controls">
+      <!-- ↓ EDIT: Replace MollyBurtWestvig_CV.pdf with your filename -->
+      <a class="cv-download link-hover" href="MollyBurtWestvig_CV.pdf" download>(Click here to download)</a>
+      <!-- ↓ EDIT: Replace with your email address -->
+      <a class="cv-email link-hover" href="mailto:youremail@domain.com">(youremail@domain.com)</a>
+      <span class="cv-close link-hover" id="cvClose">(X)</span>
+    </div>
+    <div class="cv-paper">
+      <!-- ↓ EDIT: Replace MollyBurtWestvig_CV.pdf with your filename -->
+      <iframe src="MollyBurtWestvig_CV.pdf" title="CV"></iframe>
+    </div>
+  </div>
+</div>
