@@ -64,14 +64,6 @@
     .about-email { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); text-decoration:none; }
     .about-body { flex:1; display:grid; grid-template-columns:1fr 33%; overflow:hidden; min-height:0; }
 
-    /* LEFT — stack zone (desktop only) */
-    .stack-zone { position:relative; overflow:hidden; cursor:ns-resize; }
-    .scroll-hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-family:'Bitter',Georgia,serif; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:rgba(0,0,0,.3); pointer-events:none; transition:opacity .6s; white-space:nowrap; z-index:10; }
-    .headshot { position:absolute; left:50%; top:50%; transform:translateX(-50%) translateY(-50%); z-index:0; width:52%; }
-    .headshot img { width:100%; height:auto; display:block; object-fit:contain; }
-    .stack-img { position:absolute; will-change:transform; }
-    .stack-img img { width:100%; height:auto; display:block; object-fit:contain; }
-
     /* Mobile image — hidden on desktop */
     .mobile-about-img { display:none; }
 
@@ -186,21 +178,11 @@
       <div class="headshot">
         <img src="images/About_7.jpg" alt="Molly Burt-Westvig">
       </div>
-      <!-- ↓ EDIT: Replace filenames if yours differ -->
-      <div class="stack-img" id="simg0" style="width:54%;"><img src="images/Logo_2.png" alt=""></div>
-      <div class="stack-img" id="simg1" style="width:46%;"><img src="images/Logo_3.png" alt=""></div>
-      <div class="stack-img" id="simg2" style="width:62%;"><img src="images/Logo_4.png" alt=""></div>
-      <div class="stack-img" id="simg3" style="width:44%;"><img src="images/Logo_5.png" alt=""></div>
-      <div class="stack-img" id="simg4" style="width:58%;"><img src="images/Logo_6.png.jpg" alt=""></div>
-      <div class="stack-img" id="simg5" style="width:50%;"><img src="images/Logo_7.png.jpg" alt=""></div>
-    
-    </div>
 
     <!-- MOBILE: single static image instead of stack -->
-    <div class="mobile-about-img">
-      <!-- ↓ EDIT: Change filename if your mobile image differs -->
-      <img src="images/About_7.jpg" alt="Molly Burt-Westvig">
-    </div>
+<div style="flex:1; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <img src="images/About_7.jpg" alt="Molly Burt-Westvig" style="max-width:100%; max-height:100%; object-fit:contain; display:block;">
+</div>
 
     <div class="bio-col">
       <!-- ↓ EDIT: Your biography -->
@@ -285,36 +267,7 @@
   if (cvClose) cvClose.addEventListener('click', () => cvBackdrop.classList.remove('open'));
   if (cvBackdrop) cvBackdrop.addEventListener('click', e => { if (e.target === cvBackdrop) cvBackdrop.classList.remove('open'); });
 
-  /* STACKING SCROLL — desktop only */
-  const zone = document.getElementById('stackZone');
-  if (zone && window.innerWidth > 768) {
-    const imgs = Array.from(zone.querySelectorAll('.stack-img'));
-    const hint = document.getElementById('scrollHint');
-    const n = imgs.length;
-    const rotations = [-2.4, 1.8, -1.1, 2.8, -1.6, 1.3, -2.0];
-    const restOffsets = [{x:-8,y:-22},{x:12,y:-14},{x:-18,y:-8},{x:20,y:-18},{x:-6,y:-10},{x:14,y:-20},{x:-10,y:-16}];
-    const startOffsets = [{x:-80},{x:90},{x:-60},{x:100},{x:-90},{x:70},{x:-70}];
-    imgs.forEach((img,i) => { img.style.zIndex = i+2; });
-    let progress = 0, targetProgress = 0;
-
-    function render() {
-      progress += (targetProgress - progress) * 0.06;
-      const zoneW = zone.offsetWidth, zoneH = zone.offsetHeight;
-      const cx = zoneW/2, cy = zoneH/2;
-      imgs.forEach((img,i) => {
-        const iw = img.offsetWidth, ih = img.offsetHeight;
-        const p = Math.max(0, Math.min(1, (progress*n)-i));
-        const sx = cx - iw/2 + startOffsets[i].x;
-        const sy = zoneH + ih;
-        const rx = cx - iw/2 + restOffsets[i].x;
-        const ry = cy - ih/2 + restOffsets[i].y;
-        img.style.left = (sx+(rx-sx)*p)+'px';
-        img.style.top = (sy+(ry-sy)*p)+'px';
-        img.style.transform = `rotate(${p>0?rotations[i]:0}deg)`;
-      });
-      requestAnimationFrame(render);
-    }
-
+ 
     zone.addEventListener('wheel', e => {
       e.preventDefault();
       targetProgress = Math.max(0, Math.min(1, targetProgress + e.deltaY*0.0005));
