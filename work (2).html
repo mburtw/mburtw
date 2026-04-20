@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work — Molly Burt-Westvig</title>
+  <link rel="icon" type="image/png" href="images/logo_1.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 12px; }
+    body { font-family: 'Bitter', Georgia, serif; background: #fff; color: #000; overflow-x: hidden; }
+    * { cursor: none !important; }
+    #cursor-dot { position: fixed; width: 8px; height: 8px; background: #000; border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%,-50%); transition: width .15s, height .15s, background .15s, border .15s; top:0; left:0; }
+    #cursor-dot.hovering { width:10px; height:10px; background:transparent; border:1.5px solid #000; }
+    .link-hover { text-decoration: none; position: relative; color: inherit; }
+    .link-hover::after { content:''; position:absolute; left:0; bottom:-1px; width:0; height:1.5px; background:#CCFF00; transition:width .2s ease; }
+    .link-hover:hover::after { width:100%; }
+    .mb-nav { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:4px 0; background:#fff; position:sticky; top:0; z-index:200; }
+    .mb-nav-left { display:flex; align-items:center; padding-left:16px; }
+    .mb-nav-name { font-family:'Helvetica World','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:#000; text-decoration:none; }
+    .mb-nav-center { display:flex; align-items:center; justify-content:center; }
+    .mb-nav-center img { height:100px; object-fit:contain; }
+    .mb-nav-right { display:flex; align-items:center; justify-content:flex-end; gap:10px; padding-right:16px; }
+    .mb-nav-links { display:flex; align-items:center; gap:10px; list-style:none; }
+    .mb-nav-links li { display:flex; align-items:center; }
+    .mb-nav-links a { font-family:'Bitter',Georgia,serif; font-weight:400; font-size:9px; letter-spacing:.11em; text-transform:uppercase; color:#000; text-decoration:none; white-space:nowrap; }
+    .mb-nav-links a:hover { opacity:.5; }
+    .mb-ig-link { display:flex; align-items:center; opacity:.75; color:#000; }
+    .mb-ig-link:hover { opacity:.4; }
+    .mb-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:2px; }
+    .mb-hamburger span { display:block; width:20px; height:1.5px; background:#000; }
+    .mobile-menu { display:none; position:fixed; inset:0; z-index:500; background:rgba(255,255,255,.88); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); flex-direction:column; padding:20px 24px 40px; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #000; padding-bottom:12px; margin-bottom:28px; }
+    .mobile-menu-name { font-family:'Helvetica World','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.13em; text-transform:uppercase; }
+    .mobile-menu-close { background:none; border:none; font-size:18px; }
+    .mobile-menu-links { list-style:none; display:flex; flex-direction:column; gap:18px; }
+    .mobile-menu-links a { font-family:'Bitter',Georgia,serif; font-size:24px; letter-spacing:.1em; text-transform:uppercase; color:#000; text-decoration:none; display:block; }
+    .cv-backdrop { display:none; position:fixed; inset:0; z-index:600; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(255,255,255,.45); align-items:flex-start; justify-content:center; padding:50px 20px 60px; overflow-y:auto; }
+    .cv-backdrop.open { display:flex; }
+    .cv-float-wrap { width:100%; max-width:50vw; display:flex; flex-direction:column; }
+    .cv-controls { display:grid; grid-template-columns:1fr 1fr 1fr; align-items:center; margin-bottom:8px; }
+    .cv-download, .cv-email, .cv-close { font-family:'Bitter',Georgia,serif; font-size:12px; color:#000; text-decoration:none; background:none; border:none; padding:0; }
+    .cv-download { text-align:left; } .cv-email { text-align:center; } .cv-close { text-align:right; }
+    .cv-paper { width:100%; background:#fff; box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08); }
+    .cv-paper canvas { width:100%; display:block; margin-bottom:2px; }
+    .filter-bar { position:sticky; top:110px; z-index:100; background:#fff; border-top:0.5px solid rgba(0,0,0,.4); border-bottom:0.5px solid rgba(0,0,0,.4); display:grid; grid-template-columns:1fr 2fr 1fr; padding:10px 16px; gap:16px; }
+    .filter-col-label { display:flex; align-items:center; }
+    .filter-col-items { display:flex; flex-direction:column; gap:4px; }
+    .filter-row { display:flex; gap:16px; flex-wrap:wrap; }
+    .filter-col-right { display:flex; flex-direction:column; align-items:flex-end; gap:4px; justify-content:center; }
+    .f-text { font-family:'Bitter',Georgia,serif; font-size:10px; color:rgba(0,0,0,.5); line-height:1.6; user-select:none; background:none; border:none; padding:0; font-weight:400; }
+    .f-text.active { color:#000; font-weight:600; }
+
+    /* GRID
+       Each .dyn-row is a flex row where every item shares the same height.
+       JS sets a data-row-h attribute on the row which we read via CSS var.
+       Items use flex:none and width derived from their aspect ratio × row height.
+    */
+    .work-main { padding:32px 90px 80px; }
+    .dyn-row { display:flex; gap:40px; margin-bottom:48px; align-items:flex-end; }
+    .work-item { flex:none; min-width:0; }
+    /* img fills the box exactly — width set inline by JS, height set on row */
+    .work-item img { width:100%; height:100%; display:block; object-fit:cover; transition:opacity .15s; }
+    .work-item:hover img { opacity:.75; }
+    .work-caption { padding:8px 0 0; }
+    .cap-title { font-family:'Bitter',Georgia,serif; font-size:12px; font-weight:600; color:#000; display:inline-block; line-height:1.5; position:relative; }
+    .cap-title::after { content:''; position:absolute; left:0; bottom:-1px; width:0; height:1.5px; background:#CCFF00; transition:width .2s ease; }
+    .work-item:hover .cap-title::after { width:100%; }
+    .cap-meta { font-family:'Bitter',Georgia,serif; font-size:11px; color:rgba(0,0,0,.5); display:block; line-height:1.5; }
+
+    /* SLIDESHOW */
+    .ss-overlay { display:none; position:fixed; inset:0; z-index:600; background:rgba(255,255,255,.96); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; }
+    .ss-overlay.open { display:flex; }
+    .ss-top-bar { position:absolute; top:0; left:0; right:0; display:flex; justify-content:flex-end; padding:16px 20px; z-index:2; }
+    .ss-return { font-family:'Bitter',Georgia,serif; font-size:12px; color:#000; background:none; border:none; padding:0; }
+    .ss-inner { display:flex; align-items:center; justify-content:center; width:100%; position:relative; z-index:1; padding:0 10px; }
+    .ss-arrow { width:60px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:none; border:none; padding:10px; opacity:1; transition:opacity .15s; }
+    .ss-arrow:hover { opacity:.35; }
+    .ss-arrow svg { width:30px; height:30px; stroke:#000; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .ss-content { flex:1; display:flex; flex-direction:column; align-items:center; min-width:0; max-width:90vw; }
+    .ss-img-container { position:relative; display:flex; align-items:center; justify-content:center; max-width:90vw; max-height:78vh; overflow:hidden; }
+    .ss-img-container.zoomed { overflow:auto; }
+    .ss-img-container img { max-width:90vw; max-height:78vh; width:auto; height:auto; object-fit:contain; display:block; transition:transform .3s ease; transform-origin:center center; cursor:zoom-in !important; }
+    .ss-img-container.zoomed img { max-width:none; max-height:none; transform:scale(1.8); cursor:zoom-out !important; }
+    .ss-caption { margin-top:16px; text-align:center; padding:0 8px; }
+    .ss-cap-title { font-family:'Bitter',Georgia,serif; font-size:15px; font-weight:600; display:block; margin-bottom:4px; }
+    .ss-cap-line { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); display:block; line-height:1.7; }
+    .ss-counter { position:absolute; bottom:20px; font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.35); }
+
+    /* VS OVERLAY */
+    .vs-overlay { display:none; position:fixed; inset:0; z-index:700; background:#fff; flex-direction:column; }
+    .vs-overlay.open { display:flex; }
+    .vs-body { flex:1; display:grid; grid-template-columns:2fr 1fr; overflow:hidden; min-height:0; }
+    .vs-left { overflow-y:scroll; height:100%; display:flex; flex-direction:column; }
+    .vs-right { height:100%; overflow:hidden; border-left:0.5px solid rgba(0,0,0,.4); padding:20px 16px; display:flex; flex-direction:column; }
+    .vs-info-title { font-family:'Bitter',Georgia,serif; font-size:15px; font-weight:600; line-height:1.3; margin-bottom:8px; }
+    .vs-info-meta { display:flex; flex-direction:column; gap:1px; }
+    .vs-info-line { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); line-height:1.4; display:block; }
+    .vs-info-divider { border:none; border-top:0.5px solid rgba(0,0,0,.4); width:60%; margin:12px 0; }
+    .vs-info-desc { font-family:'Bitter',Georgia,serif; font-size:10px; line-height:1.85; color:rgba(0,0,0,.5); }
+    .vs-video-wrap { width:100%; height:calc(100vh - 110px); flex-shrink:0; display:flex; flex-direction:column; }
+    .vs-video-area { flex:1; min-height:0; padding:10px 30px 0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .vs-video-area video { width:100%; height:100%; object-fit:contain; }
+    .vs-video-area iframe { width:100%; height:100%; border:none; }
+    .vs-video-ph { width:100%; height:100%; background:#111; display:flex; align-items:center; justify-content:center; }
+    .vs-video-ph span { font-family:'Bitter',Georgia,serif; font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:rgba(255,255,255,.3); }
+    .vs-views-peek { flex-shrink:0; padding:6px 16px 8px; border-top:0.5px solid rgba(0,0,0,.4); }
+    .vs-views-label { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); }
+    .vs-nav-close { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); }
+
+    @media (max-width:768px) {
+      .mb-nav-links { display:none; } .mb-hamburger { display:flex; }
+      .mb-nav-center img { height:60px; } .cv-float-wrap { max-width:95vw; }
+      .filter-bar { top:68px; grid-template-columns:1fr; gap:6px; padding:8px 16px; }
+      .filter-col-right { align-items:flex-start; }
+      .work-main { padding:20px 16px 60px; } .dyn-row { gap:12px; margin-bottom:24px; }
+      .vs-body { grid-template-columns:1fr; }
+      .vs-right { height:auto; overflow:visible; border-left:none; border-top:0.5px solid rgba(0,0,0,.4); }
+      .vs-video-wrap { height:50vh; }
+    }
+  </style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+
+<nav class="mb-nav">
+  <div class="mb-nav-left"><a href="index.html" class="mb-nav-name link-hover">Molly Burt-Westvig</a></div>
+  <div class="mb-nav-center"><a href="index.html"><img id="navLogo" src="images/logo_1.png" alt="Logo" class="link-hover"></a></div>
+  <div class="mb-nav-right">
+    <ul class="mb-nav-links">
+      <li><a href="work.html" class="link-hover">Work</a></li>
+      <li><a href="exhibitions.html" class="link-hover">Exhibitions</a></li>
+      <li><a href="#" id="cvNavLink" class="link-hover">CV</a></li>
+      <li><a href="about.html" class="link-hover">About</a></li>
+      <li><a href="https://instagram.com/YOURUSERNAME" target="_blank" class="mb-ig-link link-hover" aria-label="Instagram">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none"/>
+        </svg>
+      </a></li>
+    </ul>
+    <button class="mb-hamburger link-hover" id="mbHamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header">
+    <span class="mobile-menu-name">Molly Burt-Westvig</span>
+    <button class="mobile-menu-close link-hover" id="menuClose">&#215;</button>
+  </div>
+  <ul class="mobile-menu-links">
+    <li><a href="work.html" class="link-hover">Work</a></li>
+    <li><a href="exhibitions.html" class="link-hover">Exhibitions</a></li>
+    <li><a href="#" class="link-hover" id="cvMobileLink">CV</a></li>
+    <li><a href="about.html" class="link-hover">About</a></li>
+  </ul>
+</div>
+
+<div class="cv-backdrop" id="cvBackdrop">
+  <div class="cv-float-wrap">
+    <div class="cv-controls">
+      <a class="cv-download link-hover" href="MollyBurtWestvig_CV.pdf" download>(Click here to download)</a>
+      <a class="cv-email link-hover" href="mailto:mollyburtwestvigstudio@gmail.com">(mollyburtwestvigstudio@gmail.com)</a>
+      <span class="cv-close link-hover" id="cvClose">(X)</span>
+    </div>
+    <div class="cv-paper" id="cvPaper"></div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-col-label"><span class="f-text">Filters</span></div>
+  <div class="filter-col-items">
+    <div class="filter-row">
+      <span class="f-text link-hover filter-btn" data-filter="painting">(Painting)</span>
+      <span class="f-text link-hover filter-btn" data-filter="works-on-paper">(Works on Paper)</span>
+      <span class="f-text link-hover filter-btn" data-filter="dirt-work">(Dirt-Work)</span>
+    </div>
+    <div class="filter-row">
+      <span class="f-text link-hover filter-btn" data-filter="video-sculpture">(Video Sculpture)</span>
+      <span class="f-text link-hover filter-btn" data-filter="installation">(Installation)</span>
+      <span class="f-text link-hover filter-btn" data-filter="moving-image">(Moving Image)</span>
+    </div>
+  </div>
+  <div class="filter-col-right">
+    <span class="f-text link-hover" id="resetBtn">(Reset)</span>
+    <span class="f-text link-hover" id="slideshowBtn">(View as Slideshow)</span>
+  </div>
+</div>
+
+<div class="work-main" id="workMain"></div>
+
+<div id="work-data" style="display:none;">
+  <div class="work-item" data-category="dirt-work"><img src="images/2026_1.jpg" alt="Echoes of the Universe"><div class="work-caption"><span class="cap-title">Echoes of the Universe</span><span class="cap-meta">2026 · Chalk and spray paint on asphalt encrusted panel · 11 x 14"</span></div></div>
+  <div class="work-item" data-category="works-on-paper"><img src="images/2026_3.png" alt="A Study for Clouds (After Turner)"><div class="work-caption"><span class="cap-title">A Study for Clouds (After Turner)</span><span class="cap-meta">2026 · Chalk, acrylic, printed silk on paper · 88 x 120"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2025_1.png" alt="Everyone Loves A Sunset"><div class="work-caption"><span class="cap-title">Everyone Loves A Sunset</span><span class="cap-meta">2025 · Oil and printed silk on canvas · 60 x 48"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2025_5.jpg" alt="Today Tomorrow and Yesterday"><div class="work-caption"><span class="cap-title">Today Tomorrow and Yesterday</span><span class="cap-meta">2025 · Oil and silk with digital print · 26 x 36"</span></div></div>
+  <div class="work-item" data-category="video-sculpture" data-vs="true" data-vs-title="To Trace A Sunbeam" data-vs-year="2024" data-vs-medium="Hundreds of salvaged automotive mirrors, asphalt, outmoded video projectors, 4-6 channel video of highway puddle in a breeze" data-vs-dims="Site responsive, 36 x 40 x 12'" data-vs-desc="" data-vs-video="https://player.vimeo.com/video/1106034674"><img src="images/vs_totrace.png" alt="To Trace A Sunbeam"><div class="work-caption"><span class="cap-title">To Trace A Sunbeam</span><span class="cap-meta">2024 · Video projection on salvaged automotive mirrors · 36 x 40"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2025_3.jpg" alt="Good Luck Tomorrow"><div class="work-caption"><span class="cap-title">Good Luck Tomorrow</span><span class="cap-meta">2025 · Oil with printed silk · 46 x 48"</span></div></div>
+  <div class="work-item" data-category="dirt-work"><img src="images/2024_3.png" alt="Over and Out"><div class="work-caption"><span class="cap-title">Over and Out</span><span class="cap-meta">2024 · Asphalt, automotive glass, printed silk on panel · 18 x 22"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2025_4.jpg" alt="Rumor Mill"><div class="work-caption"><span class="cap-title">Rumor Mill</span><span class="cap-meta">2025 · Oil on canvas with printed silk · 26 x 46"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2025_2.jpg" alt="Circling the Flame"><div class="work-caption"><span class="cap-title">Circling the Flame</span><span class="cap-meta">2025 · Oil on canvas with printed silk · 26 x 36"</span></div></div>
+  <div class="work-item" data-category="dirt-work"><img src="images/2023_6.png" alt="Composite Constellations"><div class="work-caption"><span class="cap-title">Composite Constellations</span><span class="cap-meta">2023 · Chalk and spray paint on asphalt encrusted panel · 11 x 14"</span></div></div>
+  <div class="work-item" data-category="video-sculpture" data-vs="true" data-vs-title="Closer Than They Appear" data-vs-year="2024" data-vs-medium="Video projection on bricks" data-vs-dims="30 x 30 x 12" data-vs-desc="" data-vs-video="https://player.vimeo.com/video/920699518"><img src="images/vs_closerthan.png" alt="Closer Than They Appear"><div class="work-caption"><span class="cap-title">Closer Than They Appear</span><span class="cap-meta">2024 · Video projection on bricks · 30 x 30"</span></div></div>
+  <div class="work-item" data-category="dirt-work"><img src="images/2023_1.png" alt="Asphalt Elegy"><div class="work-caption"><span class="cap-title">Asphalt Elegy</span><span class="cap-meta">2023 · Asphalt, acrylic, chalk · 11 x 14"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2024_2.png" alt="Seven (MORE) Years Bad Luck"><div class="work-caption"><span class="cap-title">Seven (MORE) Years Bad Luck</span><span class="cap-meta">2024 · Silkscreen, oil on canvas, chalk · 11 x 14"</span></div></div>
+  <div class="work-item" data-category="painting"><img src="images/2023_2.png" alt="Rooting for the Underdog"><div class="work-caption"><span class="cap-title">Rooting for the Underdog</span><span class="cap-meta">2023 · Chalk and inkjet on panel · 11 x 14"</span></div></div>
+  <div class="work-item" data-category="video-sculpture" data-vs="true" data-vs-title="Sleight of Hand, Feint of Heart" data-vs-year="2023" data-vs-medium="Video projection on printed mesh, curtain rod" data-vs-dims="30 x 90 x 12" data-vs-desc="The movement in this piece is an illusion from the video, making the work appear as if there is a breeze in the space when actually still." data-vs-video="https://player.vimeo.com/video/900465653"><img src="images/vs_sleigh.png" alt="Sleight of Hand, Feint of Heart"><div class="work-caption"><span class="cap-title">Sleight of Hand, Feint of Heart</span><span class="cap-meta">2023 · Video projection on printed mesh · 30 x 90"</span></div></div>
+  <div class="work-item" data-category="installation"><img src="images/2024_1.png" alt="It's About Time"><div class="work-caption"><span class="cap-title">It's About Time</span><span class="cap-meta">2024 · Mesh fabric, steel, silk, collected safety glass, oil painting · 28 x 90"</span></div></div>
+  <div class="work-item" data-category="works-on-paper"><img src="images/2026_2.png" alt="Draft of Everyone Loves A Sunset"><div class="work-caption"><span class="cap-title">Draft of Everyone Loves A Sunset</span><span class="cap-meta">2025 · Chalk, printed silk, and acrylic on paper · 44 x 30"</span></div></div>
+  <div class="work-item" data-category="works-on-paper"><img src="images/2026_4.png" alt="Untitled study"><div class="work-caption"><span class="cap-title">Untitled study</span><span class="cap-meta">2026 · Chalk, printed silk, and acrylic on paper · 44 x 30"</span></div></div>
+  <div class="work-item" data-category="works-on-paper"><img src="images/2023_4.png" alt="Denoument"><div class="work-caption"><span class="cap-title">Denoument</span><span class="cap-meta">2022 · Ground glass, inkjet print, acrylic · 9 x 12"</span></div></div>
+  <div class="work-item" data-category="works-on-paper"><img src="images/2023_5.png" alt="All in Silhouette"><div class="work-caption"><span class="cap-title">All in Silhouette</span><span class="cap-meta">2022 · Inkjet print, acrylic · 9 x 12"</span></div></div>
+  <div class="work-item" data-category="installation"><img src="images/2023_3.png" alt="Window Shopping"><div class="work-caption"><span class="cap-title">Window Shopping</span><span class="cap-meta">2023 · Printed silk, steel, roadside markers, landscaping mesh · 44 x 30"</span></div></div>
+  <div class="work-item" data-category="dirt-work"><img src="images/2024_4.png" alt="Mouthful of Silver"><div class="work-caption"><span class="cap-title">Mouthful of Silver</span><span class="cap-meta">2024 · Ground mirror, auto glass, and cement on panel · 11 x 14"</span></div></div>
+  <div class="work-item" data-category="dirt-work"><img src="images/2024_5.png" alt="On the Infinite"><div class="work-caption"><span class="cap-title">On the Infinite</span><span class="cap-meta">2024 · Printed silk, asphalt · 22 x 18"</span></div></div>
+</div>
+
+<!-- SLIDESHOW -->
+<div class="ss-overlay" id="ssOverlay">
+  <div class="ss-top-bar"><button class="ss-return link-hover" id="ssReturn">(Return to Gallery)</button></div>
+  <div class="ss-inner" id="ssInner">
+    <button class="ss-arrow link-hover" id="ssPrev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="ss-content" id="ssContent">
+      <div class="ss-img-container" id="ssImgContainer"></div>
+      <div class="ss-caption">
+        <span class="ss-cap-title" id="ssCaptionTitle"></span>
+        <span class="ss-cap-line" id="ssCaptionMeta"></span>
+      </div>
+    </div>
+    <button class="ss-arrow link-hover" id="ssNext"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+  <span class="ss-counter" id="ssCounter"></span>
+</div>
+
+<!-- VS OVERLAY -->
+<div class="vs-overlay" id="vsOverlay">
+  <nav class="mb-nav" style="flex-shrink:0;">
+    <div class="mb-nav-left"><a href="index.html" class="mb-nav-name link-hover">Molly Burt-Westvig</a></div>
+    <div class="mb-nav-center"><img src="images/logo_1.png" alt="Logo" style="height:60px;object-fit:contain;"></div>
+    <div class="mb-nav-right">
+      <ul class="mb-nav-links">
+        <li><a href="work.html" class="link-hover">Work</a></li>
+        <li><a href="exhibitions.html" class="link-hover">Exhibitions</a></li>
+        <li><a href="about.html" class="link-hover">About</a></li>
+      </ul>
+      <span class="vs-nav-close link-hover" id="vsClose">(Return to Work)</span>
+    </div>
+  </nav>
+  <div class="vs-body">
+    <div class="vs-left">
+      <div class="vs-video-wrap">
+        <div class="vs-video-area" id="vsVideoArea"><div class="vs-video-ph"><span>Loading...</span></div></div>
+        <div class="vs-views-peek"><span class="vs-views-label">Documentation &amp; Views</span></div>
+      </div>
+    </div>
+    <div class="vs-right">
+      <span class="vs-info-title" id="vsTitle"></span>
+      <div class="vs-info-meta">
+        <span class="vs-info-line" id="vsYear"></span>
+        <span class="vs-info-line" id="vsMedium"></span>
+        <span class="vs-info-line" id="vsDims"></span>
+      </div>
+      <hr class="vs-info-divider">
+      <p class="vs-info-desc" id="vsDesc"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const dot = document.getElementById('cursor-dot');
+document.addEventListener('mousemove', e => { dot.style.left=e.clientX+'px'; dot.style.top=e.clientY+'px'; });
+function registerHover(el) {
+  el.addEventListener('mouseenter', () => dot.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => dot.classList.remove('hovering'));
+}
+
+const logoFiles = ['logo_1.png','Logo_2.png','Logo_3.png','Logo_4.png'];
+let lastLogo = 'logo_1.png';
+const logoEl = document.getElementById('navLogo');
+if (logoEl) logoEl.addEventListener('click', () => {
+  const opts = logoFiles.filter(l => l !== lastLogo);
+  const pick = opts[Math.floor(Math.random()*opts.length)];
+  lastLogo = pick; logoEl.src = 'images/'+pick;
+});
+
+const hamburger = document.getElementById('mbHamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuClose = document.getElementById('menuClose');
+if (hamburger) hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+if (menuClose) menuClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+
+const cvBackdrop = document.getElementById('cvBackdrop');
+const cvClose = document.getElementById('cvClose');
+let pdfLoaded = false;
+function loadPDF() {
+  if (pdfLoaded) return; pdfLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  s.onload = () => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdfjsLib.getDocument('MollyBurtWestvig_CV.pdf').promise.then(pdf => {
+      const container = document.getElementById('cvPaper');
+      container.innerHTML = '';
+      for (let p = 1; p <= pdf.numPages; p++) {
+        pdf.getPage(p).then(page => {
+          const canvas = document.createElement('canvas');
+          canvas.style.cssText = 'width:100%;display:block;margin-bottom:2px;';
+          container.appendChild(canvas);
+          const cw = container.offsetWidth;
+          const base = page.getViewport({scale:1});
+          const vp = page.getViewport({scale: cw/base.width});
+          canvas.width = vp.width; canvas.height = vp.height; canvas.style.height = 'auto';
+          page.render({canvasContext:canvas.getContext('2d'), viewport:vp});
+        });
+      }
+    });
+  };
+  document.head.appendChild(s);
+}
+document.getElementById('cvNavLink').addEventListener('click', e => { e.preventDefault(); cvBackdrop.classList.add('open'); loadPDF(); });
+const cvMobile = document.getElementById('cvMobileLink');
+if (cvMobile) cvMobile.addEventListener('click', e => { e.preventDefault(); cvBackdrop.classList.add('open'); loadPDF(); });
+if (cvClose) cvClose.addEventListener('click', () => cvBackdrop.classList.remove('open'));
+if (cvBackdrop) cvBackdrop.addEventListener('click', e => { if(e.target===cvBackdrop) cvBackdrop.classList.remove('open'); });
+
+/* ============================================================
+   DIMENSION PARSING + SCALING ENGINE
+   
+   Strategy:
+   - Parse W x H from each work's caption text
+   - Compute a "scaled height" for each work using sqrt(area) ratio,
+     clamped between MIN_H and MAX_H
+   - Pack items into rows: each row gets a fixed pixel height (the
+     height of the tallest item assigned to that row by dimension)
+   - Within each row, each item's width = rowHeight * (realW/realH)
+     so landscape works are proportionally wider
+   - If total widths in a row would exceed available width, start new row
+   - Max 4 items per row; min 1
+   ============================================================ */
+
+const MIN_H = 100;
+const MAX_H = 340;
+const GAP = 40;
+
+function parseDims(metaText) {
+  const matches = [...metaText.matchAll(/(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)/gi)];
+  if (!matches.length) return null;
+  // use last match (avoids matching things like "4-6 channel")
+  const m = matches[matches.length - 1];
+  return { w: parseFloat(m[1]), h: parseFloat(m[2]) };
+}
+
+function scaledHeight(area, maxArea) {
+  const ratio = Math.sqrt(area / maxArea);
+  return Math.round(MIN_H + ratio * (MAX_H - MIN_H));
+}
+
+const workData = document.getElementById('work-data');
+const workMain = document.getElementById('workMain');
+const allItems = Array.from(workData.querySelectorAll('.work-item'));
+let activeFilter = 'all';
+
+function buildGrid(items) {
+  workMain.innerHTML = '';
+  if (!items.length) return;
+
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) { buildGridMobile(items); return; }
+
+  // Available width inside the padded container
+  const availW = workMain.clientWidth;
+
+  // Get real image aspect ratios from the loaded images
+  // Fall back to parsed dims, then 1:1
+  function getAspect(item) {
+    const img = item.querySelector('img');
+    if (img && img.naturalWidth && img.naturalHeight) {
+      return img.naturalWidth / img.naturalHeight;
+    }
+    const meta = item.querySelector('.cap-meta');
+    const d = meta ? parseDims(meta.textContent) : null;
+    if (d) return d.w / d.h;
+    return 1;
+  }
+
+  // Parse all areas for relative scaling
+  let maxArea = 0;
+  const areas = items.map(item => {
+    const meta = item.querySelector('.cap-meta');
+    const d = meta ? parseDims(meta.textContent) : null;
+    if (!d) return 0;
+    const area = d.w * d.h;
+    maxArea = Math.max(maxArea, area);
+    return area;
+  });
+  if (maxArea === 0) maxArea = 1;
+
+  // Assign a target height to each item
+  const targetHeights = items.map((item, i) => {
+    const area = areas[i];
+    if (!area) return 200;
+    return scaledHeight(area, maxArea);
+  });
+
+  // Pack into rows
+  // Each row picks the tallest target height among its items as the row height.
+  // Items are packed until total width (at rowH) exceeds availW, max 4 per row.
+  const rows = [];
+  let i = 0;
+  while (i < items.length) {
+    // Try packing from 1 to 4 items
+    let rowItems = [];
+    let rowH = 0;
+
+    for (let take = 1; take <= 4 && i + take - 1 < items.length; take++) {
+      const candidates = items.slice(i, i + take);
+      const candidateH = Math.max(...candidates.map((_, j) => targetHeights[i + j]));
+      // Total width = sum of (rowH * aspect) + gaps
+      const totalW = candidates.reduce((sum, item, j) => {
+        return sum + candidateH * getAspect(candidates[j]);
+      }, 0) + GAP * (take - 1);
+
+      if (totalW <= availW) {
+        rowItems = candidates;
+        rowH = candidateH;
+      } else {
+        break;
+      }
+    }
+
+    // If even 1 item overflows, just use 1 item with adjusted height
+    if (rowItems.length === 0) {
+      rowItems = [items[i]];
+      const aspect = getAspect(items[i]);
+      // Scale height so width fits
+      rowH = Math.min(targetHeights[i], Math.floor(availW / aspect));
+    }
+
+    rows.push({ items: rowItems, h: rowH });
+    i += rowItems.length;
+  }
+
+  // Render rows
+  rows.forEach(({ items: rowItems, h }) => {
+    const row = document.createElement('div');
+    row.className = 'dyn-row';
+    rowItems.forEach(item => {
+      const clone = item.cloneNode(true);
+      const aspect = getAspect(item);
+      const w = Math.round(h * aspect);
+      // Set explicit size on the item wrapper
+      clone.style.width = w + 'px';
+      clone.style.flexShrink = '0';
+      // Set height on the image
+      const img = clone.querySelector('img');
+      if (img) { img.style.height = h + 'px'; img.style.width = w + 'px'; img.style.objectFit = 'contain'; }
+      row.appendChild(clone);
+      registerHover(clone);
+      attachItemEvents(clone);
+    });
+    workMain.appendChild(row);
+  });
+}
+
+function buildGridMobile(items) {
+  // Mobile: 2 columns, uniform heights
+  let i = 0;
+  while (i < items.length) {
+    const row = document.createElement('div');
+    row.className = 'dyn-row';
+    row.style.flexWrap = 'wrap';
+    items.slice(i, i+2).forEach(item => {
+      const clone = item.cloneNode(true);
+      clone.style.width = 'calc(50% - 6px)';
+      const img = clone.querySelector('img');
+      if (img) { img.style.height = '160px'; img.style.width = '100%'; img.style.objectFit = 'contain'; }
+      row.appendChild(clone);
+      registerHover(clone);
+      attachItemEvents(clone);
+    });
+    workMain.appendChild(row);
+    i += 2;
+  }
+}
+
+function getVisible() {
+  return allItems.filter(item => activeFilter === 'all' || item.dataset.category === activeFilter);
+}
+
+function attachItemEvents(item) {
+  if (item.dataset.vs === 'true') {
+    item.addEventListener('click', () => openVS(item));
+  } else {
+    item.addEventListener('click', () => {
+      const visible = getVisible().filter(i => i.dataset.vs !== 'true');
+      const title = item.querySelector('.cap-title') ? item.querySelector('.cap-title').textContent : '';
+      const idx = visible.findIndex(vi => vi.querySelector('.cap-title') && vi.querySelector('.cap-title').textContent === title);
+      openSlideshow(idx >= 0 ? idx : 0, visible);
+    });
+  }
+}
+
+function initGrid() {
+  const imgs = allItems.map(item => item.querySelector('img')).filter(Boolean);
+  let loaded = 0;
+  if (!imgs.length) { buildGrid(getVisible()); return; }
+  imgs.forEach(img => {
+    const done = () => { loaded++; if (loaded === imgs.length) buildGrid(getVisible()); };
+    if (img.complete && img.naturalWidth) done();
+    else { img.addEventListener('load', done); img.addEventListener('error', done); }
+  });
+}
+initGrid();
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => buildGrid(getVisible()), 150);
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  registerHover(btn);
+  btn.addEventListener('click', () => {
+    activeFilter = btn.dataset.filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === activeFilter));
+    buildGrid(getVisible());
+  });
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  activeFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  buildGrid(getVisible());
+});
+
+/* SLIDESHOW */
+let ssIdx = 0, ssItems = [];
+const ssOverlay = document.getElementById('ssOverlay');
+const ssInner = document.getElementById('ssInner');
+const ssContainer = document.getElementById('ssImgContainer');
+let isZoomed = false;
+
+function closeSS() { ssOverlay.classList.remove('open'); document.body.style.overflow=''; isZoomed=false; ssContainer.classList.remove('zoomed'); }
+ssOverlay.addEventListener('click', e => { if (!ssInner.contains(e.target) && e.target.id !== 'ssReturn') closeSS(); });
+
+function openSlideshow(startIdx, items) {
+  ssItems = items; ssIdx = Math.min(startIdx, ssItems.length-1);
+  isZoomed = false; ssContainer.classList.remove('zoomed');
+  showSS(); ssOverlay.classList.add('open'); document.body.style.overflow='hidden';
+}
+
+function showSS() {
+  if (!ssItems.length) return;
+  isZoomed = false; ssContainer.classList.remove('zoomed');
+  const item = ssItems[ssIdx];
+  const img = item.querySelector('img');
+  ssContainer.innerHTML = '';
+  if (img) {
+    const c = document.createElement('img'); c.src = img.src; c.alt = img.alt;
+    ssContainer.appendChild(c);
+    c.addEventListener('click', e => { e.stopPropagation(); isZoomed=!isZoomed; ssContainer.classList.toggle('zoomed', isZoomed); });
+  }
+  document.getElementById('ssCaptionTitle').textContent = item.querySelector('.cap-title') ? item.querySelector('.cap-title').textContent : '';
+  document.getElementById('ssCaptionMeta').textContent = item.querySelector('.cap-meta') ? item.querySelector('.cap-meta').textContent : '';
+  document.getElementById('ssCounter').textContent = (ssIdx+1)+' / '+ssItems.length;
+}
+
+document.getElementById('slideshowBtn').addEventListener('click', () => openSlideshow(0, getVisible().filter(i => i.dataset.vs !== 'true')));
+document.getElementById('ssReturn').addEventListener('click', closeSS);
+document.getElementById('ssNext').addEventListener('click', e => { e.stopPropagation(); ssIdx=(ssIdx+1)%ssItems.length; showSS(); });
+document.getElementById('ssPrev').addEventListener('click', e => { e.stopPropagation(); ssIdx=(ssIdx-1+ssItems.length)%ssItems.length; showSS(); });
+document.addEventListener('keydown', e => {
+  if (!ssOverlay.classList.contains('open')) return;
+  if (e.key==='Escape') { if (isZoomed) { isZoomed=false; ssContainer.classList.remove('zoomed'); } else closeSS(); }
+  if (e.key==='ArrowRight') { ssIdx=(ssIdx+1)%ssItems.length; showSS(); }
+  if (e.key==='ArrowLeft') { ssIdx=(ssIdx-1+ssItems.length)%ssItems.length; showSS(); }
+});
+
+/* VS OVERLAY */
+const vsOverlay = document.getElementById('vsOverlay');
+function openVS(item) {
+  document.getElementById('vsTitle').textContent = item.dataset.vsTitle || '';
+  document.getElementById('vsYear').textContent = item.dataset.vsYear || '';
+  document.getElementById('vsMedium').textContent = item.dataset.vsMedium || '';
+  document.getElementById('vsDims').textContent = item.dataset.vsDims || '';
+  document.getElementById('vsDesc').textContent = item.dataset.vsDesc || '';
+  const area = document.getElementById('vsVideoArea');
+  const src = item.dataset.vsVideo || '';
+  if (src.includes('vimeo')) area.innerHTML = `<iframe src="${src}?autoplay=1&loop=1&background=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  else if (src) area.innerHTML = `<video autoplay loop muted playsinline><source src="${src}" type="video/mp4"></video>`;
+  else area.innerHTML = `<div class="vs-video-ph"><span>No video linked</span></div>`;
+  vsOverlay.classList.add('open'); document.body.style.overflow='hidden';
+}
+document.getElementById('vsClose').addEventListener('click', () => {
+  vsOverlay.classList.remove('open'); document.body.style.overflow='';
+  document.getElementById('vsVideoArea').innerHTML = '<div class="vs-video-ph"><span>Loading...</span></div>';
+});
+
+document.querySelectorAll('a, button, .link-hover').forEach(registerHover);
+</script>
+</body>
+</html>
