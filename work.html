@@ -100,24 +100,25 @@
     .cap-dims { font-family: 'Bitter',Georgia,serif; font-size: 11px; color: rgba(0,0,0,.5); display: block; line-height: 1.5; margin-top: 2px; }
     .cap-medium { font-family: 'Bitter',Georgia,serif; font-size: 11px; color: rgba(0,0,0,.4); display: block; line-height: 1.5; font-style: italic; }
 
-    /* SLIDESHOW */
-    .ss-overlay { display: none; position: fixed; inset: 0; z-index: 600; background: rgba(255,255,255,.96); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; }
-    .ss-overlay.open { display: flex; }
-    .ss-top-bar { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: flex-end; padding: 16px 20px; }
-    .ss-return { font-family: 'Bitter',Georgia,serif; font-size: 12px; color: #000; background: none; border: none; padding: 0; }
-    .ss-inner { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; z-index: 1; padding: 0 10px; }
-    .ss-arrow { width: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 10px; transition: opacity .15s; }
-    .ss-arrow:hover { opacity: .35; }
-    .ss-arrow svg { width: 30px; height: 30px; stroke: #000; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-    .ss-content { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; max-width: 90vw; }
-    .ss-img-container { display: flex; align-items: center; justify-content: center; max-width: 90vw; max-height: 78vh; overflow: hidden; }
-    .ss-img-container.zoomed { overflow: auto; }
-    .ss-img-container img { max-width: 90vw; max-height: 78vh; width: auto; height: auto; object-fit: contain; display: block; transition: transform .3s ease; cursor: zoom-in !important; }
-    .ss-img-container.zoomed img { max-width: none; max-height: none; transform: scale(1.8); cursor: zoom-out !important; }
-    .ss-caption { margin-top: 16px; text-align: center; padding: 0 8px; }
-    .ss-cap-title { font-family: 'Bitter',Georgia,serif; font-size: 15px; font-weight: 600; display: block; margin-bottom: 4px; }
-    .ss-cap-line { font-family: 'Bitter',Georgia,serif; font-size: 12px; color: rgba(0,0,0,.5); display: block; line-height: 1.7; }
-    .ss-counter { position: absolute; bottom: 20px; font-family: 'Bitter',Georgia,serif; font-size: 12px; color: rgba(0,0,0,.35); }
+      /* SLIDESHOW */
+    .ss-overlay { display:none; position:fixed; inset:0; z-index:600; background:rgba(255,255,255,.96); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; }
+    .ss-overlay.open { display:flex; }
+    .ss-top-bar { position:absolute; top:0; left:0; right:0; display:flex; justify-content:flex-end; padding:16px 20px; }
+    .ss-return { font-family:'Bitter',Georgia,serif; font-size:12px; color:#000; background:none; border:none; padding:0; }
+    .ss-inner { display:flex; align-items:center; justify-content:center; width:100%; position:relative; z-index:1; padding:0 10px; }
+    .ss-arrow { width:60px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:none; border:none; padding:10px; transition:opacity .15s; }
+    .ss-arrow:hover { opacity:.35; }
+    .ss-arrow svg { width:30px; height:30px; stroke:#000; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .ss-content { flex:1; display:flex; flex-direction:column; align-items:center; min-width:0; max-width:90vw; }
+    .ss-img-container { display:flex; align-items:center; justify-content:center; max-width:90vw; max-height:78vh; overflow:hidden; }
+    .ss-img-container.zoomed { overflow:auto; }
+    .ss-img-container img { max-width:90vw; max-height:78vh; width:auto; height:auto; object-fit:contain; display:block; transition:transform .3s ease; cursor:zoom-in !important; }
+    .ss-img-container.zoomed img { max-width:none; max-height:none; transform:scale(1.8); cursor:zoom-out !important; }
+    .ss-caption { margin-top:16px; text-align:center; padding:0 8px; }
+    .ss-cap-title { font-family:'Bitter',Georgia,serif; font-size:15px; font-weight:600; display:block; margin-bottom:4px; }
+    .ss-cap-line { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); display:block; line-height:1.7; }
+    .ss-counter { position:absolute; bottom:20px; font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.35); }
+
 
     /* VS OVERLAY */
     .vs-overlay { display: none; position: fixed; inset: 0; z-index: 700; background: #fff; flex-direction: column; }
