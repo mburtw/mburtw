@@ -245,9 +245,9 @@
       <div class="work-caption"><span class="cap-title">Today Tomorrow and Yesterday</span><span class="cap-dims">2025 · 26 x 36"</span><span class="cap-medium">Oil and silk with digital print</span></div>
     </div>
 
-    <div class="work-item" data-category="video-sculpture" data-vs="true"
-         data-vs-page="exhibitions/vs-totrace.html"
-         data-vs-title="To Trace A Sunbeam" data-vs-year="2024"
+  <div class="work-item" data-category="video-sculpture" data-vs="true"
+     data-vs-page="exhibitions/to-trace-a-sunbeam.html"
+         data-vs-title="Untitled" data-vs-year="2024"
          data-vs-medium="Salvaged automotive mirrors, asphalt, outmoded projectors, 4–6 channel video"
          data-vs-dims="40' x 12' x 30' (size variable)"
          data-vs-desc="To Trace A Sunbeam is an installation of hundreds of salvaged automotive mirrors, asphalt, outmoded projectors and four to six channel projected video. Each iteration evolves from the previous, finding new compositions and connections to the site in which it is installed."
@@ -544,7 +544,16 @@ allItems.forEach(item => {
 
 // VS OVERLAY
 const vsOverlay=document.getElementById('vsOverlay');
-function openVS(item){
+function openVS(item){function openVS(item){
+  if(item.dataset.vsPage){
+    // Open exhibition page as full-screen iframe overlay
+    const overlay = document.getElementById('vsOverlay');
+    const body = overlay.querySelector('.vs-body');
+    body.innerHTML = `<iframe src="${item.dataset.vsPage}" style="width:100%;height:100%;border:none;"></iframe>`;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    return;
+  }
   document.getElementById('vsTitle').textContent=item.dataset.vsTitle||'';
   document.getElementById('vsYear').textContent=item.dataset.vsYear||'';
   document.getElementById('vsMedium').textContent=item.dataset.vsMedium||'';
