@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 12px; }
+    html { font-size: 16px; }
     body { font-family: 'Bitter', Georgia, serif; background: #fff; color: #000; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
     * { cursor: none !important; }
     html, body { cursor: none !important; }
@@ -18,13 +18,13 @@
     .link-hover { text-decoration: none; position: relative; color: inherit; }
     .link-hover::after { content:''; position:absolute; left:0; bottom:-1px; width:0; height:1.5px; background:#CCFF00; transition:width .2s ease; }
     .link-hover:hover::after { width:100%; }
-    .mb-nav { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:4px 0; background:#fff; flex-shrink:0; z-index:200; }
-    .mb-nav-left { display:flex; align-items:center; padding-left:16px; }
-    .mb-nav-name { font-family:'Helvetica World','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:#000; text-decoration:none; }
+    .mb-nav { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:8px 0; background:#fff; flex-shrink:0; z-index:200; }
+    .mb-nav-left { display:flex; align-items:center; padding-left:20px; }
+    .mb-nav-name { font-family:'Helvetica World','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:14px; letter-spacing:.13em; text-transform:uppercase; color:#000; text-decoration:none; }
     .mb-nav-center img { height:100px; object-fit:contain; }
-    .mb-nav-right { display:flex; align-items:center; justify-content:flex-end; gap:10px; padding-right:16px; }
-    .mb-nav-links { display:flex; align-items:center; gap:10px; list-style:none; }
-    .mb-nav-links a { font-family:'Bitter',Georgia,serif; font-size:9px; letter-spacing:.11em; text-transform:uppercase; color:#000; text-decoration:none; white-space:nowrap; }
+    .mb-nav-right { display:flex; align-items:center; justify-content:flex-end; gap:20px; padding-right:20px; }
+    .mb-nav-links { display:flex; align-items:center; gap:20px; list-style:none; }
+    .mb-nav-links a { font-family:'Bitter',Georgia,serif; font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:#000; text-decoration:none; white-space:nowrap; }
     .mb-nav-links a:hover { opacity:.5; }
     .mb-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:2px; }
     .mb-hamburger span { display:block; width:20px; height:1.5px; background:#000; }
@@ -90,17 +90,17 @@
     }
     .work-item:hover .img-wrap img { opacity:.75; }
     .work-caption { padding:8px 0 0; text-align:center; margin-top:auto; }
-    .cap-title { font-family:'Bitter',Georgia,serif; font-size:12px; font-weight:600; color:#000; display:block; line-height:1.5; position:relative; }
+    .cap-title { font-family:'Bitter',Georgia,serif; font-size:14px; font-weight:600; color:#000; display:block; line-height:1.5; position:relative; }
     .cap-title::after { content:''; position:absolute; left:50%; transform:translateX(-50%); bottom:-1px; width:0; height:1.5px; background:#CCFF00; transition:width .2s ease; }
     .work-item:hover .cap-title::after { width:100%; }
-    .cap-meta { font-family:'Bitter',Georgia,serif; font-size:11px; color:rgba(0,0,0,.5); display:block; line-height:1.5; margin-top:2px; font-style:italic; }
+    .cap-meta { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); display:block; line-height:1.5; margin-top:2px; font-style:italic; }
 
     /* RIGHT COLUMN — frozen */
     .ex-right { height:100%; overflow:hidden; border-left:0.5px solid rgba(0,0,0,.4); padding:32px 24px; display:flex; flex-direction:column; }
-    .ex-info-title { font-family:'Bitter',Georgia,serif; font-size:20px; font-weight:600; line-height:1.25; margin-bottom:4px; }
-    .ex-info-year { font-family:'Bitter',Georgia,serif; font-size:13px; color:rgba(0,0,0,.4); display:block; margin-bottom:20px; }
+    .ex-info-title { font-family:'Bitter',Georgia,serif; font-size:25px; font-weight:600; line-height:1.25; margin-bottom:4px; }
+    .ex-info-year { font-family:'Bitter',Georgia,serif; font-size:16px; color:rgba(0,0,0,.4); display:block; margin-bottom:20px; }
     .ex-info-meta { display:flex; flex-direction:column; gap:3px; }
-    .ex-info-line { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); line-height:1.6; display:block; }
+    .ex-info-line { font-family:'Bitter',Georgia,serif; font-size:14px; color:rgba(0,0,0,.5); line-height:1.6; display:block; }
     .ex-info-divider { border:none; border-top:0.5px solid rgba(0,0,0,.3); width:50%; margin:20px 0; }
     .ex-info-desc { font-family:'Bitter',Georgia,serif; font-size:12px; line-height:1.95; color:rgba(0,0,0,.65); }
     .ex-press-link { margin-top:24px; }
@@ -179,20 +179,20 @@
   <div class="ex-left">
     <div class="ex-hero-wrap">
       <div class="ex-slides-area">
-        <!-- Installation shots: molly 2.jpg, molly 4.jpg, molly 6.jpg, molly 12.jpg -->
-        <div class="ex-slide active"><img src="../images/molly 2.jpg" alt="Good Luck Tomorrow — installation view, Flow Space Gallery 2025"></div>
-        <div class="ex-slide"><img src="../images/molly 4.jpg" alt="Good Luck Tomorrow — installation view"></div>
+        <!-- Installation shots: molly 12.png, molly 4.png, molly 6.jpg, molly 2.png -->
+        <div class="ex-slide active"><img src="../images/molly 12.png" alt="Good Luck Tomorrow — installation view, Flow Space Gallery 2025"></div>
+        <div class="ex-slide"><img src="../images/molly 4.png" alt="Good Luck Tomorrow — installation view"></div>
         <div class="ex-slide"><img src="../images/molly 6.jpg" alt="Good Luck Tomorrow — installation view"></div>
-        <div class="ex-slide"><img src="../images/molly 12.jpg" alt="Good Luck Tomorrow — installation view"></div>
+        <div class="ex-slide"><img src="../molly 2.png" alt="Good Luck Tomorrow — installation view"></div>
         <button class="ss-btn link-hover" id="ssPrev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
         <button class="ss-btn link-hover" id="ssNext"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
       <div class="ss-controls"><!-- arrows moved into slides area --></div>
       <div class="ss-thumbs" id="ssThumbs">
-        <div class="ss-thumb active link-hover" data-index="0"><img src="../images/molly 2.jpg" alt="Slide 1"></div>
-        <div class="ss-thumb link-hover" data-index="1"><img src="../images/molly 4.jpg" alt="Slide 2"></div>
+        <div class="ss-thumb active link-hover" data-index="0"><img src="../images/molly 12.png" alt="Slide 1"></div>
+        <div class="ss-thumb link-hover" data-index="1"><img src="../images/images/molly 4.png" alt="Slide 2"></div>
         <div class="ss-thumb link-hover" data-index="2"><img src="../images/molly 6.jpg" alt="Slide 3"></div>
-        <div class="ss-thumb link-hover" data-index="3"><img src="../images/molly 12.jpg" alt="Slide 4"></div>
+        <div class="ss-thumb link-hover" data-index="3"><img src="../images/molly 2.png" alt="Slide 4"></div>
       </div>
       <div class="works-divider"><span class="works-divider-label">Works from Exhibition</span></div>
     </div>
@@ -212,34 +212,34 @@
         </div>
 
         <div class="work-item">
-          <div class="img-wrap"><img src="../images/molly_4b.png" alt="Today Tomorrow and Yesterday"></div>
-          <div class="work-caption">
-            <span class="cap-title">Today Tomorrow and Yesterday</span>
-            <span class="cap-meta">2025 · Oil and silk with digital print · 26 x 36"</span>
-          </div>
-        </div>
-
-        <div class="work-item">
-          <div class="img-wrap"><img src="../images/molly_6b.png" alt="Good Luck Tomorrow"></div>
-          <div class="work-caption">
-            <span class="cap-title">Good Luck Tomorrow</span>
-            <span class="cap-meta">2025 · Oil with printed silk · 46 x 48"</span>
-          </div>
-        </div>
-
-        <div class="work-item">
-          <div class="img-wrap"><img src="../images/molly_5b.png" alt="Rumor Mill"></div>
+          <div class="img-wrap"><img src="../images/molly_4b.png" alt="Rumor Mill"></div>
           <div class="work-caption">
             <span class="cap-title">Rumor Mill</span>
-            <span class="cap-meta">2025 · Oil on canvas with printed silk · 26 x 46"</span>
+            <span class="cap-meta">2025 · Oil and silk with digital print · 26 x 46"</span>
           </div>
         </div>
 
         <div class="work-item">
-          <div class="img-wrap"><img src="../images/molly_8b.png" alt="Circling the Flame"></div>
+          <div class="img-wrap"><img src="../images/molly_6b.png" alt="Circling the Flame"></div>
           <div class="work-caption">
             <span class="cap-title">Circling the Flame</span>
+            <span class="cap-meta">2025 · Oil with printed silk · 26 x 36"</span>
+          </div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/molly_5b.png" alt="Today, Tomorrow, and Yesterday"></div>
+          <div class="work-caption">
+            <span class="cap-title">Today, Tomorrow, and Yesterday</span>
             <span class="cap-meta">2025 · Oil on canvas with printed silk · 26 x 36"</span>
+          </div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/molly_8b.png" alt="Good Luck Tomorrow"></div>
+          <div class="work-caption">
+            <span class="cap-title">Good Luck Tomorrow</span>
+            <span class="cap-meta">2025 · Oil on canvas with printed silk · 46 x 48"</span>
           </div>
         </div>
 
