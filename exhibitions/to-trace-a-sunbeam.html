@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To Trace A Sunbeam — Molly Burt-Westvig</title>
+  <link rel="icon" type="image/png" href="../images/logo_1.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 12px; }
+    body { font-family: 'Bitter', Georgia, serif; background: #fff; color: #000; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+    * { cursor: none !important; }
+    html, body { cursor: none !important; }
+    #cursor-dot { position: fixed; width: 8px; height: 8px; background: #000; border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%,-50%); transition: width .15s, height .15s, background .15s, border .15s; top:0; left:0; display:block !important; visibility:visible !important; }
+    #cursor-dot.hovering { width:10px; height:10px; background:transparent; border:1.5px solid #000; }
+    .link-hover { text-decoration: none; position: relative; color: inherit; }
+    .link-hover::after { content:''; position:absolute; left:0; bottom:-1px; width:0; height:1.5px; background:#CCFF00; transition:width .2s ease; }
+    .link-hover:hover::after { width:100%; }
+
+    /* NAV */
+    .mb-nav { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:4px 0; background:#fff; flex-shrink:0; z-index:200; }
+    .mb-nav-left { display:flex; align-items:center; padding-left:16px; }
+    .mb-nav-name { font-family:'Helvetica World','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:#000; text-decoration:none; }
+    .mb-nav-center img { height:100px; object-fit:contain; }
+    .mb-nav-right { display:flex; align-items:center; justify-content:flex-end; gap:10px; padding-right:16px; }
+    .mb-nav-links { display:flex; align-items:center; gap:10px; list-style:none; }
+    .mb-nav-links a { font-family:'Bitter',Georgia,serif; font-size:9px; letter-spacing:.11em; text-transform:uppercase; color:#000; text-decoration:none; white-space:nowrap; }
+    .mb-nav-links a:hover { opacity:.5; }
+    .mb-ig-link { display:flex; align-items:center; opacity:.75; color:#000; }
+    .mb-ig-link:hover { opacity:.4; }
+    .mb-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:2px; }
+    .mb-hamburger span { display:block; width:20px; height:1.5px; background:#000; }
+    .mobile-menu { display:none; position:fixed; inset:0; z-index:500; background:rgba(255,255,255,.88); backdrop-filter:blur(20px); flex-direction:column; padding:20px 24px 40px; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #000; padding-bottom:12px; margin-bottom:28px; }
+    .mobile-menu-name { font-family:'Helvetica World','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.13em; text-transform:uppercase; }
+    .mobile-menu-close { background:none; border:none; font-size:18px; }
+    .mobile-menu-links { list-style:none; display:flex; flex-direction:column; gap:18px; }
+    .mobile-menu-links a { font-family:'Bitter',Georgia,serif; font-size:24px; letter-spacing:.1em; text-transform:uppercase; color:#000; text-decoration:none; display:block; }
+
+    /* PAGE LAYOUT */
+    .ex-page { flex:1; display:grid; grid-template-columns:2fr 1fr; overflow:hidden; min-height:0; }
+    .ex-left { overflow-y:scroll; height:100%; display:flex; flex-direction:column; }
+
+    /* HERO VIDEO — fills same space as slideshow hero on other pages */
+    .ex-hero-wrap { width:100%; height:calc(100vh - 110px); flex-shrink:0; display:flex; flex-direction:column; }
+    .ex-video-area { flex:1; min-height:0; position:relative; background:#000; overflow:hidden; }
+    /* Vimeo iframe centered + cropped to fill, no controls */
+    .ex-video-area iframe {
+      position:absolute;
+      top:50%; left:50%;
+      width:100%; height:100%;
+      transform:translate(-50%,-50%);
+      border:none;
+      pointer-events:none; /* no interaction — purely ambient */
+    }
+
+    /* DIVIDER under hero video */
+    .works-divider { flex-shrink:0; border-top:0.5px solid rgba(0,0,0,.4); display:flex; align-items:center; padding:8px 16px; }
+    .works-divider-label { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); }
+
+    /* DOCUMENTATION GRID — 2 up, no captions (all one work) */
+    .ex-works-section { padding:16px 30px 0; }
+    .works-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; align-items:start; }
+    .work-item { position:relative; display:flex; flex-direction:column; }
+    .work-item .img-wrap { width:100%; display:block; background:#fff; }
+    .work-item .img-wrap img { width:100%; height:auto; display:block; transition:none; }
+
+    /* EDGE-TO-EDGE VIDEOS at bottom of left column */
+    .ex-video-strip { padding:20px 0 0; display:flex; flex-direction:column; gap:0; }
+    .ex-video-full {
+      width:100%;
+      position:relative;
+      background:#000;
+    }
+    .ex-video-full video {
+      width:100%; height:auto; display:block;
+    }
+    .ex-video-spacer { height:20px; }
+    .ex-bottom-pad { height:60px; }
+
+    /* RIGHT COLUMN */
+    .ex-right { height:100%; overflow:hidden; border-left:0.5px solid rgba(0,0,0,.4); padding:32px 24px; display:flex; flex-direction:column; }
+    .ex-info-title { font-family:'Bitter',Georgia,serif; font-size:20px; font-weight:600; line-height:1.25; margin-bottom:4px; }
+    .ex-info-year { font-family:'Bitter',Georgia,serif; font-size:13px; color:rgba(0,0,0,.4); display:block; margin-bottom:20px; }
+    .ex-info-meta { display:flex; flex-direction:column; gap:3px; }
+    .ex-info-line { font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.5); line-height:1.6; display:block; }
+    .ex-info-divider { border:none; border-top:0.5px solid rgba(0,0,0,.3); width:50%; margin:20px 0; }
+    .ex-info-desc { font-family:'Bitter',Georgia,serif; font-size:12px; line-height:1.95; color:rgba(0,0,0,.65); }
+
+    /* FULLSCREEN OVERLAY */
+    .fs-overlay { display:none; position:fixed; inset:0; z-index:900; background:rgba(255,255,255,.97); backdrop-filter:blur(28px); flex-direction:column; overflow:hidden; }
+    .fs-overlay.open { display:flex; }
+    .fs-top-bar { flex-shrink:0; display:flex; justify-content:flex-end; padding:16px 24px 0; }
+    .fs-return { font-family:'Bitter',Georgia,serif; font-size:13px; font-weight:600; color:#000; background:none; border:none; padding:0; letter-spacing:.04em; }
+    .fs-inner { flex:1; min-height:0; display:flex; align-items:center; padding:12px 0 44px; }
+    .fs-arrow { flex-shrink:0; width:70px; height:100%; display:flex; align-items:center; justify-content:center; background:none; border:none; opacity:.6; transition:opacity .15s; }
+    .fs-arrow:hover { opacity:1; }
+    .fs-arrow svg { width:32px; height:32px; stroke:#000; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .fs-content { flex:1; min-width:0; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+    .fs-img-container { flex-shrink:1; min-height:0; max-height:calc(100vh - 180px); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .fs-img-container.zoomed { overflow:auto; }
+    .fs-img-container img { max-width:calc(100vw - 160px); max-height:calc(100vh - 180px); width:auto; height:auto; object-fit:contain; display:block; transition:transform .3s ease; cursor:zoom-in !important; }
+    .fs-img-container.zoomed img { max-width:none; max-height:none; transform:scale(2); cursor:zoom-out !important; }
+    .fs-counter { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-family:'Bitter',Georgia,serif; font-size:12px; color:rgba(0,0,0,.35); }
+
+    @media(max-width:768px){
+      body{overflow:auto;height:auto;}
+      .mb-nav-links{display:none;} .mb-hamburger{display:flex;}
+      .mb-nav-center img{height:60px;}
+      .ex-page{display:flex;flex-direction:column;overflow:visible;}
+      .ex-left{overflow-y:visible;height:auto;order:1;}
+      .ex-right{height:auto;overflow:visible;border-left:none;border-top:0.5px solid rgba(0,0,0,.4);border-bottom:0.5px solid rgba(0,0,0,.4);padding:20px 16px;order:2;}
+      .ex-hero-wrap{height:56vw;min-height:240px;}
+      .works-grid{grid-template-columns:1fr;}
+      .ex-works-section{padding:16px 20px 0;}
+    }
+  </style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+
+<nav class="mb-nav">
+  <div class="mb-nav-left"><a href="../index.html" class="mb-nav-name link-hover">Molly Burt-Westvig</a></div>
+  <div class="mb-nav-center"><a href="../index.html"><img src="../images/logo_1.png" alt="Logo" class="link-hover"></a></div>
+  <div class="mb-nav-right">
+    <ul class="mb-nav-links">
+      <li><a href="../work.html" class="link-hover">Work</a></li>
+      <li><a href="../exhibitions.html" class="link-hover">Exhibitions</a></li>
+      <li><a href="../about.html" class="link-hover">About</a></li>
+        <li>
+          <a href="https://instagram.com/mollyburtwestvig" target="_blank" class="mb-ig-link link-hover" aria-label="Instagram">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+        </li>
+    </ul>
+    <button class="mb-hamburger link-hover" id="mbHamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header"><span class="mobile-menu-name">Molly Burt-Westvig</span><button class="mobile-menu-close link-hover" id="menuClose">&#215;</button></div>
+  <ul class="mobile-menu-links">
+    <li><a href="../work.html" class="link-hover">Work</a></li>
+    <li><a href="../exhibitions.html" class="link-hover">Exhibitions</a></li>
+    <li><a href="../about.html" class="link-hover">About</a></li>
+  </ul>
+</div>
+
+<div class="ex-page">
+
+  <!-- LEFT — scrolls -->
+  <div class="ex-left">
+
+    <!-- HERO VIDEO — Vimeo, autoplay, no controls, loops silently -->
+    <div class="ex-hero-wrap">
+      <div class="ex-video-area">
+        <iframe
+          src="https://player.vimeo.com/video/1106034674?autoplay=1&loop=1&muted=1&background=1&controls=0"
+          allow="autoplay; fullscreen"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="works-divider"><span class="works-divider-label">Documentation</span></div>
+    </div>
+
+    <!-- DOCUMENTATION GRID — 2 up, no captions (all one work) -->
+    <div class="ex-works-section">
+      <div class="works-grid" id="worksGrid">
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/41D5AE65-0A3C-4F04-8431-9A421B283AFF.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/5093E77A-3B1D-4F07-B679-4473AD873BB9_2_Medium.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/478506E5-3B9C-4D4C-981B-79B9AFF666ED_2.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/478506E5-3B9C-4D4C-981B-79B9AFF666ED_Medium.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/B3DE7989-07D5-4526-B081-00D643768817.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/Westvig_04_3_Medium.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/Westvig_06_2.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/Westvig_07.JPEG" alt="To Trace A Sunbeam"></div>
+        </div>
+
+        <div class="work-item">
+          <div class="img-wrap"><img src="../images/Westvig_08_Medium.png" alt="To Trace A Sunbeam"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EDGE-TO-EDGE VIDEOS -->
+    <div class="ex-video-strip">
+      <div class="ex-video-full">
+        <video autoplay loop muted playsinline>
+          <source src="../videos/burtwestvig2.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="ex-video-spacer"></div>
+      <div class="ex-video-full">
+        <video autoplay loop muted playsinline>
+          <source src="../videos/MVI_6674.mov" type="video/quicktime">
+          <source src="../videos/MVI_6674.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="ex-bottom-pad"></div>
+    </div>
+
+  </div><!-- end .ex-left -->
+
+  <!-- RIGHT — frozen info -->
+  <div class="ex-right">
+    <span class="ex-info-title">To Trace A Sunbeam</span>
+    <span class="ex-info-year">2024 — Traveling Exhibition</span>
+    <div class="ex-info-meta">
+      <span class="ex-info-line">Salvaged automotive mirrors, asphalt</span>
+      <span class="ex-info-line">Outmoded projectors</span>
+      <span class="ex-info-line">4–6 channel video</span>
+      <span class="ex-info-line">Site responsive, 36 x 40 x 12'</span>
+    </div>
+    <hr class="ex-info-divider">
+    <p class="ex-info-desc">To Trace A Sunbeam is an installation of hundreds of salvaged automotive mirrors, asphalt, outmoded projectors and four to six channel projected video. Each iteration evolves from the previous, finding new compositions and connections to the site in which it is installed.<br><br>I salvage the automotive mirrors from scrapyards and city streets; as my collection grows, each iteration becomes more dramatic, adding additional channels of video to activate more material, or with new video to continue to evolve and expand this work.</p>
+    <div style="margin-top:20px; display:flex; flex-direction:column; gap:4px;">
+      <span class="ex-info-line" style="margin-top:6px; color:rgba(0,0,0,.4); font-size:11px; text-transform:uppercase; letter-spacing:.08em;">Venues</span>
+      <span class="ex-info-line">Edgar Heap of Birds Gallery</span>
+      <span class="ex-info-line" style="color:rgba(0,0,0,.35);">Tyler School of Art — February 2024</span>
+      <span class="ex-info-line" style="margin-top:8px;">The Schick Gallery</span>
+      <span class="ex-info-line" style="color:rgba(0,0,0,.35);">Skidmore College — November 2024</span>
+    </div>
+  </div>
+
+</div><!-- end .ex-page -->
+
+<!-- FULLSCREEN OVERLAY -->
+<div class="fs-overlay" id="fsOverlay">
+  <div class="fs-top-bar"><button class="fs-return link-hover" id="fsReturn">(Return to Exhibition)</button></div>
+  <div class="fs-inner" id="fsInner">
+    <button class="fs-arrow link-hover" id="fsPrev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="fs-content">
+      <div class="fs-img-container" id="fsImgContainer"></div>
+    </div>
+    <button class="fs-arrow link-hover" id="fsNext"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+  <span class="fs-counter" id="fsCounter"></span>
+</div>
+
+<script>
+const dot=document.getElementById('cursor-dot');
+document.addEventListener('mousemove',e=>{dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});
+function rh(el){el.addEventListener('mouseenter',()=>dot.classList.add('hovering'));el.addEventListener('mouseleave',()=>dot.classList.remove('hovering'));}
+document.querySelectorAll('a,button,.link-hover').forEach(rh);
+
+const hamburger=document.getElementById('mbHamburger'),mm=document.getElementById('mobileMenu'),mc=document.getElementById('menuClose');
+if(hamburger)hamburger.addEventListener('click',()=>mm.classList.add('open'));
+if(mc)mc.addEventListener('click',()=>mm.classList.remove('open'));
+
+/* ── DOCUMENTATION IMAGE FULLSCREEN ─────────────────────────────── */
+const workItems=Array.from(document.querySelectorAll('.work-item'));
+const fsOverlay=document.getElementById('fsOverlay');
+const fsInner=document.getElementById('fsInner');
+let fsIdx=0, fsZoomed=false;
+
+function openFs(i){
+  fsIdx=i; fsZoomed=false;
+  document.getElementById('fsImgContainer').classList.remove('zoomed');
+  showFs();
+  fsOverlay.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeFs(){
+  fsOverlay.classList.remove('open');
+  document.body.style.overflow='';
+  fsZoomed=false;
+  document.getElementById('fsImgContainer').classList.remove('zoomed');
+}
+function showFs(){
+  const item=workItems[fsIdx];
+  const img=item.querySelector('img');
+  const cont=document.getElementById('fsImgContainer');
+  cont.innerHTML=''; fsZoomed=false; cont.classList.remove('zoomed');
+  if(img){
+    const c=document.createElement('img'); c.src=img.src; c.alt=img.alt; cont.appendChild(c);
+    c.addEventListener('click',e=>{e.stopPropagation();fsZoomed=!fsZoomed;cont.classList.toggle('zoomed',fsZoomed);});
+  }
+  document.getElementById('fsCounter').textContent=(fsIdx+1)+' / '+workItems.length;
+}
+
+workItems.forEach((item,i)=>{rh(item);item.addEventListener('click',()=>openFs(i));});
+fsOverlay.addEventListener('click',e=>{if(!fsInner.contains(e.target)&&!e.target.classList.contains('fs-return'))closeFs();});
+document.getElementById('fsReturn').addEventListener('click',closeFs);
+document.getElementById('fsNext').addEventListener('click',e=>{e.stopPropagation();fsIdx=(fsIdx+1)%workItems.length;showFs();});
+document.getElementById('fsPrev').addEventListener('click',e=>{e.stopPropagation();fsIdx=(fsIdx-1+workItems.length)%workItems.length;showFs();});
+document.addEventListener('keydown',e=>{
+  if(!fsOverlay.classList.contains('open'))return;
+  if(e.key==='Escape'){if(fsZoomed){fsZoomed=false;document.getElementById('fsImgContainer').classList.remove('zoomed');}else closeFs();}
+  if(e.key==='ArrowRight'){fsIdx=(fsIdx+1)%workItems.length;showFs();}
+  if(e.key==='ArrowLeft'){fsIdx=(fsIdx-1+workItems.length)%workItems.length;showFs();}
+});
+</script>
+</body>
+</html>
