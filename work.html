@@ -155,6 +155,19 @@
       .vs-body { grid-template-columns: 1fr; }
       .vs-right { height: auto; overflow: visible; border-left: none; border-top: 0.5px solid rgba(0,0,0,.4); }
       .vs-video-wrap { height: 50vh; }
+      /* Mobile slideshow fullscreen */
+.ss-inner { flex-direction: column; padding: 12px 0 8px; }
+.ss-img-container { max-height: 72vh; width: 100%; }
+.ss-img-container img { max-width: 100%; max-height: 72vh; cursor: default !important; }
+.ss-img-container.zoomed img { transform: none; cursor: default !important; }
+.ss-img-container.zoomed { overflow: hidden; }
+.ss-arrow { width: 100%; height: 48px; justify-content: center; }
+#ssPrev { order: 2; }
+#ssNext { order: 3; }
+.ss-content { order: 1; width: 100%; }
+.ss-caption { margin-top: 8px; }
+.ss-cap-title { font-size: 13px; }
+.ss-cap-line { font-size: 11px; }
     }
   </style>
 </head>
